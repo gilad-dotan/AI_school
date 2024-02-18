@@ -26,3 +26,6 @@ class Layer:
             raise ValueError("The dimension of the new theta does not match the old shape of theta")
 
         self._theta = copy.deepcopy(newTheta)
+
+    def getTheta(self):
+        return self._theta

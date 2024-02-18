@@ -13,7 +13,7 @@ class Network:
         self._layers = layers
         self._numOfLayers = len(layers)
 
-    def claculate(self, x):
+    def calculate(self, x):
 
         output = copy.deepcopy(x)
 
@@ -26,3 +26,10 @@ class Network:
     def setTheta(self, Theta: list):
         for newTheta, layer in zip(Theta, self._layers):
             layer.setTheta(newTheta)
+
+    def getThetas(self):
+        thetas = []
+        for layer in self._layers:
+            thetas.append(layer.getTheta())
+
+        return thetas

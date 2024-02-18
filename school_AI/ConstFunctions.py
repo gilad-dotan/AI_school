@@ -1,38 +1,39 @@
 import numpy as np
+from Network import Network
 
-def nnCostFunction(thetas: list, num_labels: int, X: np.ndarray, y: np.ndarray, gama: int):
+def nnCostFunction(net: Network, num_labels: int, X: np.ndarray, y: np.ndarray, gama: int, scalarFunction):
 
     """
 
-    :param thetas: the list of theta values for the network
+    :param net: the nn
     :param num_labels:
     :param X: the input data
     :param y: the output data
     :return: (J, grad)
     """
-    
+
+    thetas = net.getThetas()
+
     m = X.shape[1]
     X = [ones(m, 1), X]
-    
-    J = 0
 
     thetasGrads = []
+    RegTerm = 0
 
     for theta in thetas:
         thetasGrads.append(np.zeros(theta.shape))
+        RegTerm += theta.sum()
     
     
     # // COST \\
-    RegTerm = (gama * (sum(sum((Theta1(:, 2:) .^ 2))) + sum(sum(Theta2(:, 2:) .^ 2)))) / (2 * m)
+    RegTerm = (gama * RegTerm) / (2 * m)
     Cost = 0
-    c = zeros(m, num_labels)
-    Hypothesis = sigmoid([ones(m, 1), sigmoid(X * Theta1.T)] * Theta2.T)
-    for i = 1:num_labels
+    c = np.zeros(X.shape)
+    for i in range(num_labels):
         k = (y == i)
-        Hypothesis = sigmoid([ones(m, 1), sigmoid(X * Theta1.T)] * Theta2.T)(:, i)
-        (-k .* log(Hypothesis) - (1 - k) .* log(1 - Hypothesis))
+        Hypothesis = net.calculate(X)
         c(:, i) = k
-        Cost += (-k .* log(Hypothesis) - (1 - k) .* log(1 - Hypothesis))
+        Cost += -k * np.log(Hypothesis) - (1 - k) * np.log(1 - Hypothesis))
     
     sum(Cost)
     Cost = sum(Cost) / m
@@ -41,11 +42,11 @@ def nnCostFunction(thetas: list, num_labels: int, X: np.ndarray, y: np.ndarray, 
     # calculating the gradient
     a1 = X
     z2 = a1 * Theta1.T
-    a2 = [ones(m, 1), sigmoid(z2)]
+    a2 = [ones(m, 1), scalarFunction.calculate(z2)]
     z3 = a2 * Theta2.T
-    a3 = sigmoid(z3)
+    a3 = scalarFunction.calculate(z3)
     
-    Hypothesis = sigmoid([ones(m, 1), sigmoid(X * Theta1.T)] * Theta2.T)
+    Hypothesis = net.calculate(X)
     #c
     
     delta3 = Hypothesis - c

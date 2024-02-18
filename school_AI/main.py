@@ -14,10 +14,10 @@ def main():
                   [21]])
 
     net = Network([Layer(3, scalerFunction=Linear)])
-    print(net.claculate(x))
+    print(net.calculate(x))
 
     net.setTheta([np.array([[8], [-10], [5]])])
-    print(net.claculate(x))
+    print(net.calculate(x))
 
 if __name__ == "__main__":
     main()
