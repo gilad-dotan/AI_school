@@ -1,10 +1,23 @@
 import numpy as np
-import scalerFunctions
+from Layer import Layer
+from Network import Network
+from scalerFunctions import *
+
 
 def main():
-    print(scalerFunctions.Sigmoid.calculate(np.array([[-4, -3, -2],
-                                                      [-1, 0, 1],
-                                                      [2, 3, 4]])))
+    x = np.array([[1, 2, 3],
+                  [4, 5, 6],
+                  [7, 8, 9]])
+
+    y = np.array([[3],
+                  [12],
+                  [21]])
+
+    net = Network([Layer(3, scalerFunction=Linear)])
+    print(net.claculate(x))
+
+    net.setTheta([np.array([[8], [-10], [5]])])
+    print(net.claculate(x))
 
 if __name__ == "__main__":
     main()
