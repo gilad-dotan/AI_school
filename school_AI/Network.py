@@ -33,3 +33,6 @@ class Network:
             thetas.append(layer.getTheta())
 
         return thetas
+
+    def getNumOfLabels(self) -> int:
+        return self._layers[-1].getNumOfOutputNodes()
