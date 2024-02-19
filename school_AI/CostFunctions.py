@@ -1,7 +1,7 @@
 import numpy as np
 from Network import Network
 
-def nnCostFunction(net: Network, X: np.ndarray, y: np.ndarray, gama: int = 0.1, addRegTerm=True) -> int:
+def nnCostFunction(net: Network, X: np.ndarray, y: np.ndarray, gama: int = 0.001, addRegTerm=True) -> int:
     """
     this function computes the cost value for the neural network
     :param net: the network

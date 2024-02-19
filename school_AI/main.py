@@ -1,75 +1,36 @@
 import numpy as np
 from Layer import Layer
 from Network import Network
+import pandas as pd
 from scalerFunctions import *
 from CostFunctions import *
 from trainers import *
-
+from sklearn.model_selection import train_test_split
 
 def main():
-    x = np.array([[1.0000e+00,   1.6829e-01,  -1.9228e-01],
-[1.0000e+00,   1.8186e-01,  -1.5020e-01],
-[1.0000e+00,   2.8224e-02,   2.9975e-02],
-[1.0000e+00,  -1.5136e-01,   1.8259e-01],
-[1.0000e+00,  -1.9178e-01,   1.6733e-01],
-[1.0000e+00,  -5.5883e-02,  -1.7703e-03],
-[1.0000e+00,   1.3140e-01,  -1.6924e-01],
-[1.0000e+00,   1.9787e-01,  -1.8112e-01],
-[1.0000e+00,   8.2424e-02,  -2.6470e-02],
-[1.0000e+00,  -1.0880e-01,   1.5251e-01],
-[1.0000e+00,  -2.0000e-01,   1.9128e-01],
-[1.0000e+00,  -1.0731e-01,   5.4181e-02],
-[1.0000e+00,   8.4033e-02,  -1.3273e-01],
-[1.0000e+00,   1.9812e-01,  -1.9761e-01],
-[1.0000e+00,   1.3006e-01,  -8.0808e-02],
-[1.0000e+00,  -5.7581e-02,   1.1029e-01]]
-)
-
-    y = np.array([[0, 1, 0,   0],
-[0, 0, 1, 0],
-[0, 0, 0, 1],
-[1, 0, 0, 0],
-[0, 1, 0, 0],
-[0, 0, 1, 0],
-[0, 0, 0, 1],
-[1, 0, 0, 0],
-[0, 1, 0, 0],
-[0, 0, 1, 0],
-[0, 0, 0, 1],
-[1, 0, 0, 0],
-[0, 1, 0, 0],
-[0, 0, 1, 0],
-[0, 0, 0, 1],
-[1, 0, 0, 0]])
-
-    net = Network([Layer(3, 4, addA0=False, scalerFunction=Sigmoid),
-                   Layer(4, 4)])
+    df = pd.read_csv("apple_quality.csv")
+    df = df.drop(columns=["A_id"])
 
 
-    theta1 = np.array([[1, 2, 3],
-                       [4, 5, 0.1499],
-                       [-0.9589, 0.4202, 0.8367],
-                       [0.6570, 0.6503, -0.8462]])
-    theta1 = np.array([[0.8415, 0.4121, -0.9614],
-                       [0.1411, -1.0000, 0.1499],
-                       [-0.9589, 0.4202, 0.8367],
-                       [0.6570, 0.6503, -0.8462]])
 
-    theta2 = np.array([[5.4030e-01, -9.1113e-01, -2.7516e-01, 9.9120e-01, -1.3277e-02],
-                       [-9.8999e-01, 4.4257e-03, 9.8870e-01, -2.9214e-01, -9.0369e-01],
-                       [2.8366e-01, 9.0745e-01, -5.4773e-01, -7.4806e-01, 7.6541e-01],
-                       [7.5390e-01, -7.5969e-01, -5.3283e-01, 9.1474e-01, 2.6664e-01]])
+    y = df["Quality"].to_numpy()
+    y[y == 'good'] = 1
+    y[y == 'bad'] = 0
+    y = y.reshape((y.shape[0], 1)).astype(float)
+
+    df = df.drop(columns=["Quality"])
+    x = df.to_numpy().astype(float)
+
+    net = Network([Layer(7, 6, addA0=False, scalerFunction=Sigmoid),
+                   Layer(6, 1)])
+
+    X_train, X_val, y_train, y_val = train_test_split(x, y, test_size=0.20, random_state=42)
+    #X_val, X_test, y_val, y_test = train_test_split(x, y, test_size=0.5, random_state=42)
 
 
-    theta2 = np.array([[5.4030e-01, -9.1113e-01, -2.7516e-01, 9.9120e-01, -1.3277e-02],
-                       [-9.8999e-01, 4.4257e-03, 9.8870e-01, -2.9214e-01, -9.0369e-01],
-                       [2.8366e-01, 10, -5.4773e-01, -7.4806e-01, 7.6541e-01],
-                       [7.5390e-01, -7.5969e-01, -5.3283e-01, 9.1474e-01, 3]])
-
-    net.setTheta([theta1.T, theta2.T])
-
-    trainer = GradientDecent(net)
-    trainer.train(x, y, 10, nnCostFunction)
+    trainer = GradientDecent(net, alpha=0.001)
+    trainer.train(X_train, y_train, 100000, nnCostFunction, gama=0.01)
+    print(nnCostFunction(net, X_val, y_val, gama=0.01))
 
 if __name__ == "__main__":
     main()

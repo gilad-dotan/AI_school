@@ -45,6 +45,7 @@ class Network:
         a = []
         z = []
 
+        # calculating a and z
         for layer in self._layers:
             a.append(X)
 

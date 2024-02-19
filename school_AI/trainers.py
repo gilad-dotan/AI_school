@@ -11,18 +11,18 @@ class GradientDecent:
         if alpha is not None:
             self._alpha = alpha
 
-    def train(self, X: np.ndarray, y: np.ndarray, iterations: int, costFunc):
+    def train(self, X: np.ndarray, y: np.ndarray, iterations: int, costFunc, gama=0.001):
         for i in range(iterations):
             thetas = self._net.getThetas()
-            grads = self._net.calculateGradients(X, y, gama=0.0001)
+            grads = self._net.calculateGradients(X, y, gama=gama)
 
             newThetas = []
 
             for theta, grad in zip(thetas, grads):
                 newThetas.append(theta - self._alpha * grad.T)
 
-            self._net.setTheta(thetas)
+            self._net.setTheta(newThetas)
 
-            print(f"iter No. {i}, J = {costFunc(net=self._net, X=X, y=y, gama=0.0001, addRegTerm=True)}")
+            print(f"iter No. {i+1}, J = {costFunc(net=self._net, X=X, y=y, gama=gama, addRegTerm=True)}")
 
         return self._net
