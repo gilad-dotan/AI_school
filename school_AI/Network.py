@@ -36,7 +36,7 @@ class Network:
         return self._layers[-1].getNumOfOutputNodes()
 
     def calculateGradients(self, X, y, gama):
-
+        Hypothesis = self.calculate(X)
         m = X.shape[0]
 
         thetas = self.getThetas()
@@ -46,30 +46,28 @@ class Network:
         z = []
 
         for layer in self._layers:
-            X = np.append(np.ones((X.shape[0], 1)), X, axis=1)
             a.append(X)
 
             X = layer.calcOutput(X, addA0=False, applyScaler=False)
             z.append(X)
 
             X = layer.scaler.calculate(X)
-
-
-        Hypothesis = self.calculate(X)
+            X = np.append(np.ones((X.shape[0], 1)), X, axis=1)
 
         deltas = []
         deltas.insert(0, Hypothesis - y)
 
-        for i in range(len(thetas), 1, -1):
-            print(f"i = {i}")
-            delta = np.dot(self._layers[i].getTheta(), deltas[0])
-            delta = delta * self._layers[i].scaler.getGradient(z[i])
+        for i in range(len(thetas)-1, 0, -1):
+            delta = np.dot(deltas[0], self._layers[i].getTheta().T)
+            delta = delta * np.append(np.ones((z[i-1].shape[0], 1)), self._layers[i].scaler.getGradient(z[i-1]), axis=1)
+            delta = delta[:, 1:]
+
+            deltas.insert(0, delta)
 
 
         for i in range(len(thetas)):
             tempGrad = (np.dot(deltas[i].T, a[i])) / m
-            theta = gama * thetas[i]
-            theta[0][0] = 0
+            theta = np.append(np.zeros((tempGrad.shape[0], 1)), (gama / m) * thetas[i].T[:, 1:], axis=1)
             tempGrad += theta
             thetasGrads.append(tempGrad)
 
