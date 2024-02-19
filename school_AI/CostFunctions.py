@@ -2,16 +2,17 @@ import numpy as np
 from Network import Network
 
 def nnCostFunction(net: Network, X: np.ndarray, y: np.ndarray, gama: int = 0.1, addRegTerm=True) -> int:
-
     """
-
-    :param net: the nn
+    this function computes the cost value for the neural network
+    :param net: the network
     :param X: the input data
     :param y: the output data
-    :return: cost value
+    :param gama: the lambda value
+    :param addRegTerm: whether to add the reg term
+    :return: (int) the cost value
     """
 
-    m = X.shape[1]
+    m = X.shape[0]
 
     RegTerm = 0
     Cost = 0
