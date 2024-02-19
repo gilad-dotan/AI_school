@@ -33,8 +33,8 @@ def nnCostFunction(net: Network, X: np.ndarray, y: np.ndarray, gama: int = 0.1, 
     if addRegTerm:
         thetas = net.getThetas()
         for theta in thetas:
-            tempTheta = theta.sum()
-            RegTerm += pow(tempTheta, 2)
+            RegTerm += pow(theta, 2).sum()
+
         RegTerm = (gama * RegTerm) / (2 * m)
 
     J = Cost + RegTerm

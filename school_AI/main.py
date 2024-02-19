@@ -15,14 +15,14 @@ def main():
     net = Network([Layer(1, 2, scalerFunction=Sigmoid)])
     print(net.calculate(x))
 
-    #print(nnCostFunction(net, x, y, addRegTerm=True))
+    print(nnCostFunction(net, x, y, addRegTerm=True))
     print(nnCostFunction(net, x, y, addRegTerm=False))
 
     print("-" * 20)
 
     net.setTheta([np.array([[1000, -1000]])])
     print(net.calculate(x))
-    #print(nnCostFunction(net, x, y, addRegTerm=True))
+    print(nnCostFunction(net, x, y, addRegTerm=True))
     print(nnCostFunction(net, x, y, addRegTerm=False))
 
 if __name__ == "__main__":
