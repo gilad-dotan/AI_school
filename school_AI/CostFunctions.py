@@ -1,7 +1,7 @@
 import numpy as np
 from Network import Network
 
-def nnCostFunction(net: Network, X: np.ndarray, y: np.ndarray, gama: int = 0.1, addRegTerm=True):
+def nnCostFunction(net: Network, X: np.ndarray, y: np.ndarray, gama: int = 0.1, addRegTerm=True) -> int:
 
     """
 

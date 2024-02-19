@@ -8,13 +8,9 @@ class Linear:
     def calculate(x):
         return x
 
-class determinant:
-    def __init__(self):
-        pass
-
     @staticmethod
-    def calculate(x):
-        return x >= 1
+    def getGradient(x):
+        return 1
 
 class Sigmoid:
     def __init__(self):
@@ -23,3 +19,7 @@ class Sigmoid:
     @staticmethod
     def calculate(x):
         return 1 / (1 + np.exp(-x))
+
+    @staticmethod
+    def getGradient(x):
+        return Sigmoid.calculate(x) * (1 - Sigmoid.calculate(x));
