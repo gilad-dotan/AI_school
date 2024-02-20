@@ -1,6 +1,21 @@
 import numpy as np
 from Network import Network
 
+def getPercentage(finalValues, y):
+    temp = np.array([0]).reshape((-1, 1))
+
+    for i in range(finalValues.shape[0]):
+        row = finalValues[i, :]
+
+        i = np.unravel_index(row.argmax(), row.shape)
+
+        temp = np.append(temp, np.array([i]).reshape((-1, 1)), axis=0)
+
+    temp = temp[1:, :]
+    #print(y != temp)
+    print(f"{100 * (1 - (y != temp).sum() / y.shape[0])}% success")
+
+
 def nnCostFunction(net: Network, X: np.ndarray, y: np.ndarray, gama: int = 0.001, addRegTerm=True) -> int:
     """
     this function computes the cost value for the neural network
